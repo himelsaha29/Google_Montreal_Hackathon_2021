@@ -30,7 +30,7 @@ public class Home extends AppCompatActivity {
             GeoJSONObject geoJSON = GeoJSON.parse(murals);
             JSONArray jsarray = geoJSON.toJSON().getJSONArray("features");
 
-            JSONObject jsobject = jsarray.getJSONObject(1);
+            String jsobject = (String) jsarray.getJSONObject(1).getJSONObject("properties").get("artiste");
 
             System.out.println(jsobject);
             tv.setText(jsobject.toString());
