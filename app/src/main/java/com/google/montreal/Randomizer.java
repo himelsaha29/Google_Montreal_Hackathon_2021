@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Temp extends AppCompatActivity {
+public class Randomizer extends AppCompatActivity {
 
     private Button generate;
     private ImageView imageView;
@@ -19,24 +19,30 @@ public class Temp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_temp);
-        generate = findViewById(R.id.button);
+        setContentView(R.layout.activity_randomizer);
+        generate = findViewById(R.id.shuffle);
         imageView = findViewById(R.id.image);
+
+        randomize();
 
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int randomNum = ThreadLocalRandom.current().nextInt(0, 233 + 1);
-                String image = null;
-                try {
-                    image = (String) Home.muralJSONObjects.get(randomNum).getJSONObject("properties").get("image");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                Picasso.get().load(image).into(imageView);
-
+                randomize();
             }
         });
+    }
+
+
+    private void randomize() {
+        int randomNum = ThreadLocalRandom.current().nextInt(0, 233 + 1);
+        String image = null;
+        try {
+            image = (String) Home.muralJSONObjects.get(randomNum).getJSONObject("properties").get("image");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Picasso.get().load(image).into(imageView);
     }
 }
