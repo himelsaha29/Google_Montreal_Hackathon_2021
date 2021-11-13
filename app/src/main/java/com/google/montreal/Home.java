@@ -2,7 +2,6 @@ package com.google.montreal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -55,7 +54,7 @@ public class Home extends AppCompatActivity {
 
             tv.setText(String.valueOf(noOfMurals));
 
-            Intent showContent = new Intent(this, Temp.class);
+            Intent showContent = new Intent(this, Randomizer.class);
             startActivity(showContent);
 
         }
