@@ -1,5 +1,6 @@
 package com.google.montreal;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
@@ -14,10 +15,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener {
 
     private GoogleMap mMap;
     private Marker marker;
+    private LatLng markerPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,24 +46,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng montreal = new LatLng(45, -73);
-        marker = mMap.addMarker(new MarkerOptions().position(montreal).draggable(true).title("Marker in Montreal"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(montreal));
+        markerPosition = new LatLng(45, -73);
+        marker = mMap.addMarker(new MarkerOptions().position(markerPosition).draggable(true).title("Marker in Montreal"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(markerPosition));
         mMap.setOnMarkerClickListener(this);
+        mMap.setOnMarkerDragListener(this);
     }
     /** Called when the user clicks a marker. */
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
         // Retrieve the data from the marker.
-        LatLng position = marker.getPosition();
+        markerPosition = marker.getPosition();
         // Check if a click count was set, then display the click count.
-        if (position != null) {
-            marker.setTag(position);
-            Toast.makeText(this, "position selected" + position,Toast.LENGTH_SHORT).show();
+        if (markerPosition != null) {
+            marker.setTag(markerPosition);
+            Toast.makeText(this, "position selected" + markerPosition,Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
-            Double latitude = position.latitude;
-            Double longitude = position.longitude;
+            Double latitude = markerPosition.latitude;
+            Double longitude = markerPosition.longitude;
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
             setResult(RESULT_OK, intent);
@@ -74,4 +77,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
+    @Override
+    public void onMarkerDragStart(@NonNull Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(@NonNull Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(@NonNull Marker marker) {
+        markerPosition = marker.getPosition();
+    }
 }
