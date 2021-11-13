@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Home">
+        <activity android:name=".Temp">
 
         </activity>
         <!--
