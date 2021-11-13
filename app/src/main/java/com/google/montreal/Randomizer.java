@@ -38,7 +38,7 @@ public class Randomizer extends AppCompatActivity {
         int randomNum = ThreadLocalRandom.current().nextInt(0, 233 + 1);
         String image = null;
         try {
-            image = (String) Home.muralJSONObjects.get(randomNum).getJSONObject("properties").get("image");
+            image = (String) WelcomeActivity.muralJSONObjects.get(randomNum).getJSONObject("properties").get("image");
         } catch (Exception e) {
             e.printStackTrace();
         }
