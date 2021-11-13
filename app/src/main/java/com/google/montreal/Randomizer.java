@@ -46,6 +46,8 @@ public class Randomizer extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        System.out.println("Random number : " + randomNum);
+
         Picasso.get().load(image).into(imageView);
     }
 
