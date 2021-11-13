@@ -2,6 +2,7 @@ package com.google.montreal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ public class Randomizer extends AppCompatActivity {
 
     private Button generate;
     private ImageView imageView;
+    private Button answerBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +24,9 @@ public class Randomizer extends AppCompatActivity {
         setContentView(R.layout.activity_randomizer);
         generate = findViewById(R.id.shuffle);
         imageView = findViewById(R.id.image);
-
+        answerBtn = findViewById(R.id.answer);
         randomize();
+        setOnAnswerButtonListener();
 
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,5 +47,15 @@ public class Randomizer extends AppCompatActivity {
         }
 
         Picasso.get().load(image).into(imageView);
+    }
+
+    public void setOnAnswerButtonListener(){
+        answerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Randomizer.this, MapsActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 }
