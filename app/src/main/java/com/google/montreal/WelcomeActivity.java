@@ -70,7 +70,7 @@ public class WelcomeActivity extends AppCompatActivity {
             startGameBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(WelcomeActivity.this, Temp.class);
+                    Intent intent = new Intent(WelcomeActivity.this, Randomizer.class);
                     startActivity(intent);
                 }
             });
