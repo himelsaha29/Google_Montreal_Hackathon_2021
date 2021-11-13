@@ -1,5 +1,6 @@
 package com.google.montreal;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -34,6 +36,16 @@ public class Randomizer extends AppCompatActivity {
                 randomize();
             }
         });
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK){
+            double latitude = data.getExtras().getDouble("latitude");
+            double longitude = data.getExtras().getDouble("longitude");
+
+            System.out.println(latitude + "l:" + longitude);
+        }
     }
 
 
