@@ -3,6 +3,7 @@ package com.google.montreal;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -20,7 +21,7 @@ import java.util.HashMap;
 public class Home extends AppCompatActivity {
 
     private int noOfMurals = 0;
-    private HashMap<Integer, JSONObject> muralJSONObjects = new HashMap<>();
+    public static HashMap<Integer, JSONObject> muralJSONObjects = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +49,14 @@ public class Home extends AppCompatActivity {
                 if(image == null || image.length() < 5) {
                     continue;
                 }
-
                 muralJSONObjects.put(noOfMurals, mural);
                 noOfMurals++;
             }
 
             tv.setText(String.valueOf(noOfMurals));
+
+            Intent showContent = new Intent(this, Temp.class);
+            startActivity(showContent);
 
         }
 
