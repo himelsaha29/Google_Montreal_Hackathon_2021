@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-csv@1.0.21/src/jquery.csv.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <style>
+        div{
+          text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+  <div id="montreal" class="montreal">
+    <nav class="navbar navbar-light" style="background-color: #ed1b2f;">
+      <!-- Navbar content -->
+      <a class="navbar-brand" href="#"><h2>Explore Montreal Murals</h2></a>
+    
+    </nav>
+    <h2 style="text-align:center">Explore Montreal Murals</h2>
+    <p>
+      <span>Score: {{score}}</span>
+    </p>
+
+    <button @click="changeImage" type="button" class="btn btn-primary">NextImage</button>
+    <button v-show="displayArtist[0]!=='...'" @click="played(0)" type="button" class="btn btn-danger">{{displayArtist[0]}}</button>
+    <button v-show="displayArtist[0]!=='...'" @click="played(1)" type="button" class="btn btn-danger">{{displayArtist[1]}}</button>
+    <button v-show="displayArtist[0]!=='...'" @click="played(2)" type="button" class="btn btn-danger">{{displayArtist[2]}}</button>
+    <div v-if="isLoading" class="loading"></div>
+    <div><img v-show="isLoaded" :src="image" @load="loaded"/></div>
+    <br>
+  
+    
+  </div>
+    <script>
+      
+      var app = new Vue({
+        el: "#montreal",
+  data:{
+    
+      msg: 'Hi all',
+      code: "",
+      accessToken: "",
+      error: false,
+      times: [],
+      inputReqID: "",
+      errorMessage: "", 
+      link: "",
+      image:"",
+      isLoaded: false,
+      isLoading: false,
+      data:[],
+      score:0,
+      artists:[],
+      displayArtist:[],
+      correctArtist:-1 // index of correct artist in displayArtist array
+    
+  },
+  created: function(){
+    
+    var vm=this;
+    this.displayArtist = ["...","...","..."]
+    this.isLoaded =  false;
+    this.isLoading = true;
+    $.get( "https://data.montreal.ca/dataset/53d2e586-6e7f-4eae-89a1-2cfa7fc29fa0/resource/f02401c2-8336-4086-9955-4c5592ace72e/download/murales.csv", function( CSVdata) {
+      vm.isLoaded =  false;
+      vm.isLoading = true;
+      data = $.csv.toObjects(CSVdata);
+      var mural_index = Math.floor(Math.random()*234);
+      
+      vm.image=data[mural_index]["image"];
+      console.log(data[mural_index]["image"]);
+      // load every unique artist to array for later access
+      var tmp = new Set();
+      for(let i = 0; i<data.length;i++){
+          tmp.add(data[i]["artiste"]);
+      }
+      artists = Array.from(tmp);
+      vm.updateButtons(mural_index);
+      
+    });
+    
+    
+  },
+  mounted: function() {
+        console.log(this.code);
+        
+    },
+  methods:{
+    loaded(){
+      this.isLoaded = true;
+      this.isLoading = false;
+    },
+    changeImage(){
+      this.isLoaded =  false;
+      this.isLoading = true;
+      var mural_index = Math.floor(Math.random()*234);
+      
+      this.image=data[mural_index]["image"];
+      console.log(data[mural_index]["image"]);
+      this.updateButtons(mural_index);
+
+    },
+    played(choice){
+        if(correct==choice){
+          alert("Great jobs! That's the correct answer. ")
+          this.score+=1;
+        }
+        else{
+          alert("Wrong Answer! The correct answer is "+this.displayArtist[correct]);
+        }
+        this.changeImage();
+    },
+    updateButtons(mural_index){
+      this.displayArtist[0]=data[mural_index]["artiste"];
+      var tmpIndex = Math.floor(Math.random()*artists.length);
+      while(artists[tmpIndex]==this.displayArtist[0]){
+        tmpIndex = Math.floor(Math.random()*artists.length);
+      }
+      this.displayArtist[1] = artists[tmpIndex];
+      while(artists[tmpIndex]==this.displayArtist[0] || artists[tmpIndex]==this.displayArtist[1]){
+        tmpIndex = Math.floor(Math.random()*artists.length);
+      }
+      this.displayArtist[2] = artists[tmpIndex];
+      this.displayArtist = this.displayArtist.sort(() => 0.5 - Math.random()); // shuffle array
+      console.log(this.displayArtist);
+      for(let i = 0; i < this.displayArtist.length;i++){
+        if(this.displayArtist[i]==data[mural_index]["artiste"]){
+          correct=i;
+        }
+      }
+    }
+    
+  } 
+      })
+    </script>
+    <style>
+      .loading {
+  background: transparent url('https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif') center no-repeat;
+  height: 400px;
+  width: 400px;
+  margin:0 auto;
+}
+    </style>
+</body>
+</html>
