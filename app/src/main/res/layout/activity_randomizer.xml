@@ -15,6 +15,7 @@
         android:layout_weight="0.05">
 
         <TextView
+            android:id="@+id/score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -171,7 +172,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center"
-                        android:text="Shuffle"
+                        android:text="Next"
                         app:layout_constraintEnd_toStartOf="@id/view_card"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

@@ -20,7 +20,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Randomizer extends AppCompatActivity {
 
@@ -48,6 +47,11 @@ public class Randomizer extends AppCompatActivity {
     private TextView program;
     private TextView latitudeInfo;
     private TextView longitudeInfo;
+
+    private int score = 0;
+    private int scoreTemp = score;
+
+    private TextView scoreTV;
 
 
     @Override
@@ -83,6 +87,7 @@ public class Randomizer extends AppCompatActivity {
         address = dialog.findViewById(R.id.address);
         organization = dialog.findViewById(R.id.organization);
 
+        scoreTV = findViewById(R.id.score);
 
 
         revealBtn.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +157,7 @@ public class Randomizer extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Randomizer.this, MapsActivity.class);
                 startActivityForResult(intent, 1);
+                scoreTemp = score;
             }
         });
     }
@@ -186,13 +192,25 @@ public class Randomizer extends AppCompatActivity {
             if ((latDifference < 0.001) && (lonDifference < 0.001)) {
                 // Toast.makeText(this, "Correct answer",Toast.LENGTH_SHORT).show();
                 answer.setText("Correct answer");
+                score++;
+                scoreTV.setText("Score : " + score);
             } else {
-                answer.setText("Wrong answer");
+                answer.setText("Wrong answer. Try again");
+                score--;
+
+                if (scoreTemp > score) {
+                    score = 0;
+                    scoreTemp = score;
+                }
+
+                scoreTV.setText("Score : " + score);
             }
 
             linear.setVisibility(View.GONE);
             linear2.setVisibility(View.VISIBLE);
 
+            latTemp = latitude;
+            lonTemp = longitude;
         }
     }
 }
