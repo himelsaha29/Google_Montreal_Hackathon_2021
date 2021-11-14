@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "927115289993",
+    "project_id": "montrealhackathon",
+    "storage_bucket": "montrealhackathon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927115289993:android:3c26bb5cb4eedc190d2d58",
+        "android_client_info": {
+          "package_name": "com.google.montreal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927115289993-1ebqb3qoo0nntasdsjh69mmlhsklbpqf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIpfznZE6lHiTZKnLwNyb5ItLXqnALPrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927115289993-1ebqb3qoo0nntasdsjh69mmlhsklbpqf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
