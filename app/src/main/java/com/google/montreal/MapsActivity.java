@@ -3,8 +3,10 @@ package com.google.montreal;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,6 +22,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Marker marker;
     private LatLng markerPosition;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        dialog = new Dialog(MapsActivity.this);
+        dialog.setContentView(R.layout.maps_dialog);
+        dialog.getWindow().setLayout((int) (getResources().getDisplayMetrics().widthPixels * 0.95), ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
+
         mMap = googleMap;
         mMap.setMinZoomPreference(11.5f);
         markerPosition = new LatLng(45.5017, -73.5673);

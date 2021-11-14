@@ -1,5 +1,6 @@
 package com.google.montreal;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,9 +13,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -47,12 +51,15 @@ public class Randomizer extends AppCompatActivity {
     private TextView program;
     private TextView latitudeInfo;
     private TextView longitudeInfo;
+    private TextView globalHighScore;
 
     private int score = 0;
     private int scoreTemp = score;
 
     private TextView scoreTV;
 
+    DatabaseReference firebase;
+    private int highScore = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +76,7 @@ public class Randomizer extends AppCompatActivity {
         randomize();
         setOnAnswerButtonListener();
         setNextButtonListener();
+        firebase = FirebaseDatabase.getInstance().getReference().child("Global score");
 
         latTemp = latitude;
         lonTemp = longitude;
@@ -86,6 +94,8 @@ public class Randomizer extends AppCompatActivity {
         longitudeInfo = dialog.findViewById(R.id.longitude);
         address = dialog.findViewById(R.id.address);
         organization = dialog.findViewById(R.id.organization);
+        globalHighScore = findViewById(R.id.highscore);
+        getDatabaseData();
 
         scoreTV = findViewById(R.id.score);
 
@@ -115,8 +125,10 @@ public class Randomizer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 randomize();
+                getDatabaseData();
             }
         });
+        getDatabaseData();
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -204,6 +216,10 @@ public class Randomizer extends AppCompatActivity {
                 }
 
                 scoreTV.setText("Score : " + score);
+                GlobalScore gs = new GlobalScore(score);
+                if(highScore != 0 && highScore < score) {
+                    firebase.push().setValue(gs);
+                }
             }
 
             linear.setVisibility(View.GONE);
@@ -211,6 +227,38 @@ public class Randomizer extends AppCompatActivity {
 
             latTemp = latitude;
             lonTemp = longitude;
+            getDatabaseData();
         }
+        getDatabaseData();
     }
+
+    private int getDatabaseData() {
+        firebase = FirebaseDatabase.getInstance().getReference().child("Global score");
+        firebase.addListenerForSingleValueEvent(new ValueEventListener() {
+            int highScoreTemp = 0;
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String scoreString = ds.child("score").getValue().toString();
+                    int score = Integer.valueOf(scoreString);
+                    if (score > highScoreTemp) {
+                        highScoreTemp = score;
+                    }
+                }
+                highScore = highScoreTemp;
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+
+        globalHighScore.setText("Global high score : " + highScore);
+        return highScore;
+    }
+
 }
