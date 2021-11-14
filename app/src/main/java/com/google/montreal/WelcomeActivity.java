@@ -55,41 +55,41 @@ public class WelcomeActivity extends AppCompatActivity {
                 muralJSONObjects.put(noOfMurals, mural);
                 noOfMurals++;
             }
-        }
-        catch(JSONException e){
-                e.printStackTrace();
-            }
-        }
-
-        private void setViews () {
-            startGameBtn = findViewById(R.id.startGameBtn);
-            welcomeImageIv = findViewById(R.id.welcomeImageIv);
-        }
-
-        private void setOnStartGameBtnClick () {
-            startGameBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(WelcomeActivity.this, Randomizer.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        private String loadJSONFromAsset () {
-            String json = null;
-            InputStream is = null;
-            try {
-                is = this.getAssets().open("murales_geojson.json");
-                int size = is.available();
-                byte[] buffer = new byte[size];
-                is.read(buffer);
-                is.close();
-                json = new String(buffer, "UTF-8");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                return null;
-            }
-            return json;
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
+
+    private void setViews() {
+        startGameBtn = findViewById(R.id.startGameBtn);
+        welcomeImageIv = findViewById(R.id.welcomeImageIv);
+    }
+
+    private void setOnStartGameBtnClick() {
+        startGameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(WelcomeActivity.this, Randomizer.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private String loadJSONFromAsset() {
+        String json = null;
+        InputStream is = null;
+        try {
+            is = this.getAssets().open("murales_geojson.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+}

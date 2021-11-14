@@ -44,9 +44,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        markerPosition = new LatLng(45, -73);
+        mMap.setMinZoomPreference(11.5f);
+        markerPosition = new LatLng(45.5017, -73.5673);
         marker = mMap.addMarker(new MarkerOptions().position(markerPosition).draggable(true).title("Marker in Montreal"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(markerPosition));
         mMap.setOnMarkerClickListener(this);
@@ -61,10 +60,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Check if a click count was set, then display the click count.
         if (markerPosition != null) {
             marker.setTag(markerPosition);
-            Toast.makeText(this, "position selected" + markerPosition,Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "position selected" + markerPosition,Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
             Double latitude = markerPosition.latitude;
             Double longitude = markerPosition.longitude;
+            Randomizer.chosenCoordinates(latitude, longitude);
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
             setResult(RESULT_OK, intent);
