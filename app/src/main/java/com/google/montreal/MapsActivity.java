@@ -18,6 +18,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener {
 
@@ -25,6 +26,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker marker;
     private LatLng markerPosition;
     private Dialog dialog;
+    private Marker correctAnswer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMinZoomPreference(11.5f);
         markerPosition = new LatLng(45.5017, -73.5673);
         marker = mMap.addMarker(new MarkerOptions().position(markerPosition).draggable(true).title("Marker in Montreal"));
+        double lastActualLat = Randomizer.getLastActualLat();
+        double lastActualLong = Randomizer.getLastActualLong();
+        if(lastActualLat!=0 && lastActualLong !=0){
+            correctAnswer = mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    .position(new LatLng(lastActualLat, lastActualLong))
+                    .draggable(false)
+                    .title("last correct"));
+        }
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(markerPosition));
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMarkerDragListener(this);

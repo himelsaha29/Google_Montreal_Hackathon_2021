@@ -35,7 +35,7 @@ public class Randomizer extends AppCompatActivity {
 
     private double latTemp = latitude;
     private double lonTemp = longitude;
-    private JSONObject selectedObject;
+    private static JSONObject selectedObject;
     private LinearLayout linear;
     private LinearLayout linear2;
     private Button next;
@@ -60,6 +60,8 @@ public class Randomizer extends AppCompatActivity {
 
     DatabaseReference firebase;
     private int highScore = 0;
+    private static double lastLat=0;
+    private static double lastLong=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +147,23 @@ public class Randomizer extends AppCompatActivity {
         latitude = lat;
         longitude = lon;
 
+        try {
+            lastLat = (double) selectedObject.get("latitude");
+
+            lastLong = (double) selectedObject.get("longitude");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        lastLat=latitude;
+        lastLong=longitude;
         System.out.println("Latitude : " + latitude + ", longitude : " + longitude);
+    }
+    public static double getLastActualLong() {
+        return lastLong;
+    }
+    public static double getLastActualLat() {
+        return lastLat;
     }
 
     private void randomize() {
@@ -193,7 +211,9 @@ public class Randomizer extends AppCompatActivity {
             double actualLon = 0;
             try {
                 actualLat = (double) selectedObject.get("latitude");
+                lastLat = actualLat;
                 actualLon = (double) selectedObject.get("longitude");
+                lastLong=actualLon;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
