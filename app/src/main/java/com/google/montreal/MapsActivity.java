@@ -3,8 +3,10 @@ package com.google.montreal;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -46,11 +48,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        dialog = new Dialog(MapsActivity.this);
-        dialog.setContentView(R.layout.maps_dialog);
-        dialog.getWindow().setLayout((int) (getResources().getDisplayMetrics().widthPixels * 0.95), ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.show();
+
+        SharedPreferences prefs = getSharedPreferences("Settings", Activity.MODE_PRIVATE);
+        String dialogShown = prefs.getString("Dialog", "No");
+
+        if (!dialogShown.equalsIgnoreCase("Done")) {
+
+            dialog = new Dialog(MapsActivity.this);
+            dialog.setContentView(R.layout.maps_dialog);
+            dialog.getWindow().setLayout((int) (getResources().getDisplayMetrics().widthPixels * 0.95), ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.setCancelable(true);
+            dialog.show();
+
+            SharedPreferences.Editor editor = getSharedPreferences("Settings", MODE_PRIVATE).edit();
+            editor.putString("Dialog", "Done");
+            editor.apply();
+        }
 
         mMap = googleMap;
         mMap.setMinZoomPreference(11.5f);
